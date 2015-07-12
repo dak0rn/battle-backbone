@@ -1,0 +1,146 @@
+<div class="container">
+	
+	<h1>Multi-language support</h1>
+
+	<p class="lead">
+		Localization is an important aspect when developing a large application
+		and battle-backbone gives you an easy way to support multiple languages.
+		This section describes how it works and how you can use it.
+	</p>
+
+	<h3 class="ln-intro"><a href="docs/languages/intro" class="permalink" data-silent="true">Introduction</a></h3>
+
+	<p>
+		battle-backbone provides you with a handy API that allows you to dynamically load localization files
+		based on the user's language. A language identifier is embedded in the URL and can be changed either by
+		the user manually or by the application using requests.
+	</p>
+
+	<p>
+		Support for multiple languages is implemented in the navigation service. Loading i18n files is provided
+		by the <strong>require.js i18n plugin</strong>. Take a look at the
+		<a href="docs/router/terms" class="permalink">Terminology</a> section in the Routing section for information
+		about how the language is embedded in the URL.
+	</p>
+
+	<h3 class="ln-format"><a href="docs/languages/format" class="permalink" data-silent="true">Formats</a></h3>
+
+	<p>
+		By default, battle-backbone uses the long form IETF language tag that consist of two groups of two characters
+		each separated by a hyphen or an underscore.<br />
+		For example <code><%- vent.request('language') %></code> (your current language).
+	</p>
+
+	<div class="alert alert-success alert-inline">
+		If you need to change the format refert to the <strong>Changing the format</strong> section below.
+	</div>
+
+	<h3 class="ln-conf"><a href="docs/languages/conf" class="permalink" data-silent="true">Language configuration</a></h3>
+
+	<p>
+		Configuration concerning the application's language is done in the configuration file. There
+		are only a few options to configure:
+	</p>
+
+	<div class="cont-list">
+		<div class="row">
+			<div class="col-md-3">
+				<h4>languages</h4>
+			</div>
+			<div class="col-md-9">
+				An array of valid language codes. If a language is set that is not contained
+				in that array <code>defaultLanguage</code> will be used instead.
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3">
+				<h4>defaultLanguage</h4>
+			</div>
+			<div class="col-md-9">
+				Language code for the defualt language. It is set if no language setting is present
+				or if the set language is invalid.
+
+				<div class="alert alert-inline alert-warning">
+					Make sure the default language is included in the <code>languages</code> array!
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-6 col-md-push-3">
+			
+			<div class="panel panel-default">
+				<div class="panel-heading">Language actions</div>
+				<div class="panel-body">
+					<ul>
+						<li>Current language: <code><%- vent.request('language') %></code></li>
+						<li>Supported languages: <code><%- JSON.stringify( vent.request('config').languages ) %></code></li>
+						<li>Default language: <code><%- vent.request('config').defaultLanguage %></code></li>
+					</ul>
+				</div>
+				<ul class="list-group">
+					<li class="list-group-item text-center ln-lngswt">
+
+						Switch the language: <br />
+
+						<div class="btn-group">
+							<button class="btn btn-warning lng-switch"  data-lang="ln-JS">ln-JS</button>
+							<button class="btn btn-primary lng-switch"  data-lang="ln-CF">ln-CF</button>
+							<button class="btn btn-danger lng-switch"   data-lang="ln-CC">ln-CC (invalid)</button>
+						</div>
+
+					</li>
+				</ul>
+			</div>
+
+			<div class="alert alert-success alert-inline">
+				As you can see, the page reloads when changing the language. This way, require.js loads the
+				correct localization and all views are re-rendered.
+			</div>
+
+		</div>
+	</div>
+
+	<h3 class="ln-default"><a href="docs/languages/default" class="permalink" data-silent="true">Default language</a></h3>
+
+	<p>
+		The default language is used if
+	</p>
+
+	<ul>
+		<li>the URL contains no language key</li>
+		<li>the URL contains an invalid language key</li>
+	</ul>
+
+	<p>
+		In either case, the language code gets inserted in the URL automatically.<br />
+		If you switch to an invalid language, the navigation service detects it and updates the URL to the default
+		language.
+	</p>
+
+	<h3 class="ln-requests"><a href="docs/languages/requests" class="permalink" data-silent="true">Changing the language</a></h3>
+
+	<p>
+		You can update the user's language using the event bus. Request <code>change:language</code> and pass the
+		code of the language to change to. The page will be reloaded automatically.
+	</p>
+
+	<div class="alert alert-warning alert-inline">
+		Refer to the <a href="docs/events/list" class="permalink">Requests overview</a> for more details.
+	</div>
+
+	<h3 class="ln-change"><a href="docs/languages/change" class="permalink" data-silent="true">Changing the language format</a></h3>
+
+	<p>
+		If you want to change the language format in the URL you have to update the <code>languagePattern</code>
+		key in the <a href="core/config" class="permalink">configuration file</a>.
+	</p>
+
+	<ul>
+		<li>You also have to update the format of the <code>defaultLanguage</code> setting</li>
+		<li>You also have to update the formats of the <code>languages</code> setting</li>
+		<li>You have to update your localization files</li>
+	</ul>
+
+</div>

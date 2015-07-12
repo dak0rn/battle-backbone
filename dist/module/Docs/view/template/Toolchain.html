@@ -1,0 +1,210 @@
+<div class="container">
+	<h1>Toolchain</h1>
+	<p class="lead">This section describes the battle-backbone toolchain that helps you automate your workflow</p>
+
+	<h3 class="ln-intro"><a href="docs/grunt/intro" class="permalink" data-silent="true">Introduction</a></h3>
+
+	<p>
+		When developing a large application an automated development workflow is important
+		for early tests and continous improvement. It helps a team make development
+		faster and increase code quality while being performant. Automating repetitive tasks
+		lets you focus on the parts that matter. battle-backbone comes with an automation workflow
+		that covers common tasks and can be extended easily.
+	</p>
+
+	<h3 class="ln-grunt"><a href="docs/grunt/grunt" class="permalink" data-silent="true">Grunt</a></h3>
+
+	<p>
+		battle-backbone uses <a href="http://gruntjs.com/">Grunt</a> as an automation system. Grunt is a 
+		JavaScript task runner used by a lot of projects for many different workflows.
+		It provides a small but flexible core API that is extended using plugins.
+	</p>
+
+	<h4>Why Grunt?</h4>
+
+	<ul>
+		<li>
+			It has a large user base and is very well documented
+		</li>
+		<li>
+			There are a lot of plugins for nearly every use case available
+		</li>
+		<li>
+			It is easy for new members or inexperienced developers to understand
+			and extend the build configuration
+		</li>
+		<li>
+			It supports require.js without writing hacks
+		</li>
+	</ul>
+
+	
+
+	<div class="row">
+		<div class="col-md-6">
+			<h3 class="ln-tasks"><a href="docs/grunt/tasks" class="permalink" data-silent="true">Available tasks</a></h3>
+		</div>
+		<div class="col-md-6">
+			<div class="alert alert-warning alert-inline">
+				<% if( 'js' === lang.ext ) { %>
+				The tasks for CoffeeScript are different. <a href="#" class="lng-switch" data-lang="ln-CF">Click here</a>
+				to view the CoffeeScript tasks.
+				<% } else { %>
+				The tasks for JavaScript are different. <a href="#" class="lng-switch" data-lang="ln-JS">Click here</a>
+				to view the JavaScript tasks.
+				<% } %>
+			</div>
+		</div>
+	</div>
+	
+	<div class="cont-list">
+		
+		<% if( 'coffee' === lang.ext ) { %>
+		<div class="row">
+			<div class="col-md-3">
+				<h4>compile</h4>
+			</div>
+			<div class="col-md-9">
+				<p>
+					This tasks compiles the CoffeeScript from the <code>src/</code> folder into
+					the <code>build/</code> folder. It will also copy all non-CoffeeScript files
+					such as images or templates.<br />
+					The <code>build/</code> directory gets cleaned every time this task is triggered.
+				</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3">
+				<h4>optimize</h4>
+			</div>
+			<div class="col-md-9">
+				<p>
+					Minifies and concatenates the JavaScript in the
+					<code>build/</code> folder into the <code>dist/</code> directory.
+				</p>
+
+				<p>
+					It uses a require.js configuration that is generated during runtime
+					and makes sure all existing models and services are included in the
+					distribution build.
+				</p>
+
+				<ul>
+					<li>All modules get minified into their <code>index.js</code> file. That also includes
+					stylesheets and template files.</li>
+					<li>
+						All services, the core of battle-backbone and important third-party dependencies
+						that are required to start the application are minified into <code>loader.js</code>.
+						This way a single request is sufficient to load all required libraries and frameworks.
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3">
+				<h4>build</h4>
+			</div>
+			<div class="col-md-9">
+				<p>
+					The <em>build</em> task combines the <em>compile</em> and <em>optimize</em>.
+					Your CoffeeScript will be compiled first and the JavaScript is
+					then minified for production.
+				</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3">
+				<h4>default</h4>
+			</div>
+			<div class="col-md-9">
+				<p>
+					If you run <code>grunt</code> without a task name it will start the
+					<em>default</em> task. The default task compiles your CoffeeScript
+					and starts two servers afterwards:
+				</p>
+
+				<ol>
+					<li>A simple HTTP webserver on port 9000 that let's you try your application</li>
+					<li>
+						A server on <code>localhost:35729</code> that provides a live reload script.
+						To use it, just include it in your HTML/PHP file:
+
+						<pre>&lt;script src="http://localhost:35729/livereload.js" type="application/javascript"&gt;&lt;/script&gt;</pre>
+					</li>
+				</ol>
+
+				<p>
+					Whenever something in the <code>src/</code> folder changes the <code>compile</code> task will
+					be triggered and your browser reloads the page automatically.
+				</p>
+			</div>
+		</div>
+
+		<% } else { %>
+
+		<div class="row">
+			<div class="col-md-3">
+				<h4>optimize</h4>
+			</div>
+			<div class="col-md-9">
+				<p>
+					Minifies and concatenates the JavaScript from the
+					<code>src/</code> folder into the <code>dist/</code> folder.
+				</p>
+
+				<p>
+					It uses a require.js configuration that is generated during runtime
+					and makes sure all existing models and services are included in the
+					distribution build.
+				</p>
+
+				<ul>
+					<li>All modules get minified into their <code>index.js</code> file. That also includes
+					stylesheets and template files.</li>
+					<li>
+						All services, the core of battle-backbone and important third-party dependencies
+						that are required to start the application are minified into <code>loader.js</code>.
+						This way a single request is sufficient to load all required libraries and frameworks.
+					</li>
+				</ul>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-md-3">
+				<h4>default</h4>
+			</div>
+			<div class="col-md-9">
+				<p>
+					If you run <code>grunt</code> without a task name it will start the
+					<em>default</em> task. The default task starts two servers:
+				</p>
+
+				<ol>
+					<li>A simple HTTP webserver on port 9000 that let's you try your application</li>
+					<li>
+						A server on <code>localhost:35729</code> that provides a live reload script.
+						To use it, just include it in your HTML/PHP file:
+
+						<pre>&lt;script src="http://localhost:35729/livereload.js" type="application/javascript"&gt;&lt;/script&gt;</pre>
+					</li>
+				</ol>
+
+				<p>
+					Whenever something in the <code>src/</code> folder changes browser reloads the page automatically
+					and you can see your changed immediately.
+				</p>
+			</div>
+		</div>
+
+
+		<% } %> 
+		
+	</div>
+
+	<div class="alert alert-success alert-inline">
+		If you need to change the require.js configuration update the <code>build.js</code>
+		file that generates it.
+	</div>
+
+</div>

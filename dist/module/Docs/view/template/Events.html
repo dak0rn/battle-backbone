@@ -1,0 +1,392 @@
+<div class="container">
+	<h1>Events and requests</h1>
+	<p class="lead">
+		battle-backbone provides a loosely coupled architecture that makes use
+		of events and requests.<br />
+		This section describes how the event system works and how you can
+		extend it.
+	</p>
+
+	<h3 class="ln-intro"><a href="docs/events/intro" class="permalink" data-silent="true">Introduction</a></h3>
+
+	<p>
+		battle-backbone uses <a href="https://github.com/marionettejs/backbone.radio">Backbone.Radio</a> that extends
+		the common publish-subscribe pattern provided by Backbone.Events by a request-response pattern and the concepts
+		of channels. It makes the communication in your application easier and more intuitive.
+	</p>
+
+	<div class="row">
+		<div class="col-md-4 col-md-push-2">
+			<div class="panel panel-primary">
+				<div class="panel-heading">Events</div>
+				<div class="panel-body">
+					Events are used to notify other components. They are a bit like
+					a black box; once fired it is not clear if something happens.<br />
+					They can triggered with the <code>.trigger()</code> function known from
+					Backbone.Events.<br /><br />
+				</div>
+				<ul class="list-group">
+					<li class="list-group-item pf-desc">Informative</li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-md-4 col-md-push-2">
+			<div class="panel panel-success">
+				<div class="panel-heading">Requests</div>
+				<div class="panel-body">
+					If you want to obtain shared state or trigger bevhaior you can use a request. It returns
+					the value or executes the function registered for the given identifier.<br />
+					Use <code>.request()</code> to request and <code>.reply()</code> to register
+					a value.
+				</div>
+				<ul class="list-group">
+					<li class="list-group-item pf-desc">Instructive</li>
+				</ul>
+			</div>
+		</div>
+		
+	</div>
+	<p>
+		Every controller extending the <a href="docs/abstract/controller" class="permalink">abstract Controller</a> is
+		provided with an event bus stored in the <code><%- ('coffee' === lang.ext ? '@' : 'this.') %>vent</code> property.
+		It is connected to the application and can be used by services to share functionality. Thus, there is a flat
+		communication hierarchy connection all the important parts.
+	</p>
+
+	<h3 class="ln-list"><a href="docs/events/list" class="permalink" data-silent="true">Requests overview</a></h3>
+
+	<div class="cont-list">
+		<div class="row">
+		
+			<div class="col-md-3">
+				<h4>config</h4>
+				<small>(App)</small>
+			</div>
+
+			<div class="col-md-5">
+			</div>
+
+			<div class="col-md-4">
+				<strong>Return value:</strong>
+				The application's configuration file
+			</div>
+
+		</div>
+		<div class="row">
+		
+			<div class="col-md-3">
+				<h4>change:title</h4>
+				<small>(service/title)</small>
+			</div>
+
+			<div class="col-md-5">
+				<strong>Arguments:</strong>
+				<ol>
+					<li>Title</li>
+				</ol>
+				<p>
+					Changes the title of the document to the given string
+				</p>
+			</div>
+
+		</div>
+
+		<div class="row">
+			<div class="col-md-3">
+				<h4>scroll:top</h4>
+				<small>(service/scroll)</small>
+			</div>
+			<div class="col-md-5">
+				<strong>Arguments:</strong>
+				<ol>
+					<li>
+						Scroll duration in milliseconds <em>[optional]</em><br />
+						Default value: 200
+					</li>
+				</ol>
+				<p>
+					Scrolls to the top of the page
+				</p>
+			</div>
+			<div class="col-md-4">
+				<strong>Return value:</strong>
+				jQuery deferred
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-3">
+				<h4>scroll:element</h4>
+				<small>(service/scroll)</small>
+			</div>
+			<div class="col-md-5">
+				<strong>Arguments:</strong>
+				<ol>
+					<li>
+						jQuery selector | jQuery object
+					</li>
+					<li>
+						Scroll duration in milliseconds <em>[optional]</em><br />
+						Default value: 200
+					</li>
+				</ol>
+				<p>
+					Scrolls to the element that matches the given selector.<br />
+				</p>
+			</div>
+			<div class="col-md-4">
+				<strong>Return value:</strong>
+				jQuery deferred
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-3">
+				<h4>scroll:offset</h4>
+				<small>(service/scroll)</small>
+			</div>
+			<div class="col-md-5">
+				<strong>Arguments:</strong>
+				<ol>
+					<li>
+						Offset
+					</li>
+					<li>
+						Scroll duration in milliseconds <em>[optional]</em><br />
+						Default value: 200
+					</li>
+				</ol>
+				<p>
+					Scrolls to the given page offset
+				</p>
+			</div>
+			<div class="col-md-4">
+				<strong>Return value:</strong>
+				jQuery deferred
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-3">
+				<h4>change:language</h4>
+				<small>(service/navigation)</small>
+			</div>
+			<div class="col-md-5">
+				<strong>Arguments:</strong>
+				<ol>
+					<li>Code of the language to set (e.g. <code>en-US</code>)</li>
+					<li>Next route to navigate to <em>[optional]</em><br />
+						Default: current route
+					</li>
+				</ol>
+				<p>
+					Changes the user's language both internally and in the URL.
+					Hard reloads the page so that require.js i18n requests the correct
+					language files.
+				</p>
+			</div>
+			<div class="col-md-4">
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-3">
+				<h4>location</h4>
+				<small>(service/navigation)</small>
+			</div>
+			<div class="col-md-5"></div>
+			<div class="col-md-4">
+				<strong>Return value:</strong>
+				Complete URL of the page (<code>window.location.href</code>)
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-3">
+				<h4>language</h4>
+				<small>(service/navigation)</small>
+			</div>
+			<div class="col-md-5"></div>
+			<div class="col-md-4">
+				<strong>Return value:</strong>
+				The current language, e.g. <code>en-US</code>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-3">
+				<h4>route</h4>
+				<small>(service/navigation)</small>
+			</div>
+			<div class="col-md-5"></div>
+			<div class="col-md-4">
+				<strong>Return value:</strong>
+				The current base route without the language, e.g. <code>docs</code>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-3">
+				<h4>route:full</h4>
+				<small>(service/navigation)</small>
+			</div>
+			<div class="col-md-5"></div>
+			<div class="col-md-4">
+				<strong>Return value:</strong>
+				The current route, e.g. <code>docs/events/list</code>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-3">
+				<h4>route:sub</h4>
+				<small>(service/navigation)</small>
+			</div>
+			<div class="col-md-5"></div>
+			<div class="col-md-4">
+				<strong>Return value:</strong>
+				The current sub route.<br />
+
+				If <code>.request('route:full')</code> returns <code>docs/events/list</code>
+				requesting <code>route:sub</code> will return <code>events/list</code>.
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-3">
+				<h4>route:info</h4>
+				<small>(service/navigation)</small>
+			</div>
+			<div class="col-md-5"></div>
+			<div class="col-md-4">
+				<strong>Return value:</strong>
+				An object that contains all route information. Your current route
+				information object looks like this:
+				<pre><%- JSON.stringify( vent.request('route:info'), null, 4 ) %></pre>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-3">
+				<h4>navigate</h4>
+				<small>(service:navigation)</small>
+			</div>
+			<div class="col-md-5">
+				<strong>Arguments:</strong>
+				<ol>
+					<li>
+						Route to navigate to.<br />
+						Can include sub routes but must not include
+						the language.
+					</li>
+					<li>
+						Boolean that indicates if the page should be
+						reloaded <em>[optional]</em>.<br />
+						Used when changing the language.
+					</li>
+				</ol>
+				<p>
+					Navigates to the given route. Triggers the destroy function in the
+					currently active controller, lazy loads the next controller and triggers
+					the show function there.<br />
+					More details can be found in the <a href="docs/modules/events" class="permalink">Modules section</a>.
+				</p>
+			</div>
+			<div class="col-md-4">
+				<strong>Return value:</strong>
+				jQuery deferred resolved after
+
+				<ul>
+					<li>the route has been changed</li>
+					<li>the next module has been loaded</li>
+					<li>the promise that the controller can return has been resolved</li>
+				</ul>
+
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-3">
+				<h4>navigate:silent</h4>
+				<small>(service/navigation)</small>
+			</div>
+			<div class="col-md-5">
+				<strong>Arguments:</strong>
+				<ol>
+					<li>Route to navigate to</li>
+				</ol>
+				<p>
+					Updates the URL but fires no events.
+					Useful for in-module navigation.
+				</p>
+			</div>
+			<div class="col-md-4"></div>
+		</div>
+
+	</div>
+
+	<h3 class="ln-event-list"><a href="docs/events/event-list" class="permalink" data-silent="true">Events overview</a></h3>
+
+	<div class="cont-list">
+		<div class="row">
+		
+			<div class="col-md-3">
+				<h4>destroy:route</h4>
+				<small>(service/navigation)</small>
+			</div>
+
+			<div class="col-md-5">
+				<strong>Arguments:</strong>
+				<ol>
+					<li>Current base route</li>
+					<li>Array with current sub routes</li>
+					<li>Next base route</li>
+					<li>Array with next sub routes</li>
+				</ol>
+				<p>
+					Triggered when a route is left. Information
+					about the route that is going to be left and information
+					about the next route is passed.
+				</p>
+			</div>
+
+		</div>
+
+		<div class="row">
+		
+			<div class="col-md-3">
+				<h4>show:route</h4>
+				<small>(service/navigation)</small>
+			</div>
+
+			<div class="col-md-5">
+				<strong>Arguments:</strong>
+				<ol>
+					<li>Next base route</li>
+					<li>Array with next sub routes</li>
+				</ol>
+				<p>
+					Triggered when a new route is shown.
+				</p>
+			</div>
+
+		</div>
+
+		<div class="row">
+		
+			<div class="col-md-3">
+				<h4>start:app</h4>
+				<small>(App)</small>
+			</div>
+
+			<div class="col-md-5">
+				<p>
+					Triggered when the application starts.<br />
+					This event is triggered after all services have been loaded
+				</p>
+			</div>
+
+		</div>
+	</div>
+
+</div>

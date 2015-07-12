@@ -1,0 +1,192 @@
+<div class="container">
+	<h1>Services</h1>
+	<p class="lead">
+		This section describes the service architecture of battle-backbone
+	</p>
+
+	<h3 class="ln-intro"><a href="docs/services/intro" class="permalink" data-silent="true">Introduction</a></h3>
+
+	<p>
+		While <a class="permalink" href="docs/modules">Modules</a> store the application's
+		business logic services are meant to be more lightweight. They can be used to provide functionality that is considered to be <em>global</em> within your application. They are also helpful in case certain things have to be done before the application starts.
+	</p>
+
+	<h3 class="ln-structure"><a href="docs/services/structure" class="permalink" data-silent="true">Structure</a></h3>
+
+	<p>
+		Services are stored in the <code>src/service</code> folder. To keep your code clean and maintainable you should only write one service per file. Services are
+		referenced in the configuration file and loaded by the
+		<a href="docs/core/app" class="permalink">Application</a> before it is started (see below).
+	</p>
+
+	<p>
+		Services are supposed to require the <code>App</code> and add themselves to the
+		<code>Service</code> module if useful.
+	</p>
+
+	<% if( 'coffee' === lang.ext ) { %>
+	<pre>define ['App'], (App) ->
+
+	App.module 'Service', (Module, a, Backbone, Marionette, $, _) ->
+
+		// Service</pre>
+	<% } else { %>
+	<pre>define(['App'], function(App) {
+
+	App.module('Service', function(Module, a, Backbone, Marionette, $, _){
+	
+		// Service
+
+	});
+});</pre>
+	<% } %>
+
+	<p>
+		Since battle-backbone provides an event based architecture it is a common best practice to provide a service's functionality at least using the controller event bus. This event bus is provided in the <code>App.vent</code> property.
+	</p>
+
+	<h3 class="ln-conf"><a href="docs/services/conf" class="permalink" data-silent="true">Configuring a service</a></h3>
+
+	<div class="row">
+		<div class="col-md-6">
+			<p>
+				After a service has been written, it has to be introduced to the application so that it is loaded automatically. To do that, add the name of the file created in <code>src/service</code> to the array 
+				<code>services</code> in the <code>src/config.<%-lang.ext%></code> configuration file.
+			</p>
+
+			<div class="alert alert-warning alert-inline">
+				If a service gets loaded not all parts of the application might already be available! If you want to perform operations after the application has been
+				started listen for the event <code>app:start</code> on the event bus.
+			</div>
+		</div>
+		<div class="col-md-6">
+			<pre>services: [
+	'title',
+	'navigation',
+	'footer',
+	'layout',
+	'behaviors',
+	'navbar',
+	'service-urls',
+	'scroll'
+]</pre>
+		</div>
+	</div>
+
+	<h3 class="ln-example"><a href="docs/services/example" class="permalink" data-silent="true">Example</a></h3>
+
+	<p>
+		By default, battle-backbone provides a title service that can be used to change the document's title. Requesting <code>change:title</code> on the event bus will update the title to the given text.
+	</p>
+
+	<% if( 'coffee' === lang.ext ) { %>
+	<pre>@vent.request 'change:title', 'Fancy webapp'
+# e.g. in a module controller</pre>
+	<% } else { %>
+	<pre>this.vent.request('change:title','Fancy webapp');
+// e.g. in a module controller</pre>
+	<% } %>
+
+	<p>
+		The implementation of the service is quite simple. It adds a <code>title()</code> function to the <code>Service</code> module and exposes that module on the event bus
+		with the <code>change:title</code> request.<br />
+		The complete source code of the title service:
+	</p>
+	
+	<% if( 'coffee' === lang.ext ) { %>
+	<pre># Title service
+# Can be used to change the page's title
+
+define ['App'], (app) ->
+	
+	app.module 'Service', (Module, a, Backbone, Marionette, $, _) ->
+		
+		Module.title = (newTitle) -> document.title = newTitle
+		
+		app.vent.reply 'change:title', Module.title
+</pre>
+	<% } else { %>
+	<pre>// Title service
+// Can be used to change the page's title
+
+define(['App'], function(app) {
+	
+	app.module('Service', function(Module, a, Backbone, Marionette, $, _) {
+		
+		Module.title = function(newTitle) { document.title = newTitle; };
+		
+		app.vent.reply('change:title', Module.title);
+	});
+});</pre>
+	<% } %>
+
+	<h3 class="ln-included"><a href="docs/services/included" class="permalink" data-silent="true">Included services</a></h3>
+
+	<p>
+		Out of the box, battle-backbone provides a couple of services with useful or required things.
+	</p>
+
+	<div class="row">
+		<div class="col-md-4">
+			<div class="well">
+				<strong>behaviors</strong> provide Marionette.Bevhiors like in-app-links or view fading
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="well">
+				<strong>footer</strong> uses the <code>Footer</code> module to add a footer to your site
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="well">
+				<strong>layout</strong> creates the global application layout with regions for a navigation, your
+				views and a footer.
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-4">
+			<div class="well">
+				<strong>navbar</strong> uses the <code>Navigation</code> module to add a navigation bar to your site
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="well">
+				<strong>navigation</strong> provides URL manipulation, module lazy loading, multi-language support
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="well">
+				<strong>scroll</strong> automatically scrolls to the top when switching views and gives you an easy
+				way to scroll to elements
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-4">
+			<div class="well">
+				<strong>service-urls</strong> overwrites <code>Backbone.Model</code> and <code>Backbone.Collection</code>
+				and adds an <code>endpoint</code> property that is used to generate an API URL.
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="well">
+				<strong>title</strong> gives you a simple way to change the document's title. Actually, you find
+				its source code in the example above.
+			</div>
+		</div>
+
+		<div class="col-md-4">
+			<div class="well create-srv-well">
+				<br />
+				<a href="docs/howto-services">
+					<i class="glyphicon glyphicon-plus"></i> Add your own service
+				</a>
+				<br /><br />
+			</div>
+		</div>
+		
+	</div>
+
+	
+</div>

@@ -1,0 +1,137 @@
+<div class="container">
+	<div class="row">
+		<div class="col-md-4 hidden-xs">
+			<img src="shield.png" class="docs-shield" alt="" />
+		</div>
+		<div class="col-md-8">
+			<p class="lead">
+				<!-- This is so bad but simple -->
+				<br class="hidden-xs" />
+				<strong>battle-backbone</strong> gives you a structure for large scale
+				business applications that perform lots of tasks in the user's browser. It helps
+				you with localization, gives you a way to achieve lazy loading your code and your assets and
+				enables you to write loose coupled applications that stay maintainable while growing.
+			</p>
+			
+			<p class="lead">
+				It also provides solutions for a couple of <em>dont's</em> in Backbone and Marionette and
+				helps you minimize memory leaks.
+			</p>
+		</div>
+	</div>
+</div>
+
+
+<div class="container content-list">
+		
+	<div class="row">
+		<div class="col-md-4 section-title"><h4>battle-backbone</h4></div>
+		<div class="col-md-8 section-content">
+			<p>
+				In the <strong>battle-backbone</strong> section you find information about <a class="permalink" href="docs/core">the core</a> that
+				boots up the application, <a class="permalink" href="docs/services">Services</a> used to provide general funtionality throughout
+				your application and <a class="permalink" href="docs/modules">Modules</a> that contain your application logic and views.
+			</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-4 section-title"><h4>Components</h4></div>
+		<div class="col-md-8 section-content">
+			<p>This section explains the different components provided out of the box, how they work and
+				how they can be extended. That includes <a class="permalink" href="docs/router">the routing system</a>,
+				<a class="permalink" href="docs/language">Multi language support</a> and <a class="permalink" href="docs/loading">lazy loading</a> of
+				static assets or JavaScript code.
+			</p>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<h2 class="text-center">Architecture</h2>
+
+	<p>
+		battle-backbone gives you a structure for sophisticated large scale applications
+		that can be extended and scaled easily. It provides you with a small <a href="docs/core" class="permalink">Core</a>,
+		a flexible <a class="permalink" href="docs/modules">Module system</a> and smaller <a href="docs/services" class="permalink">Services</a> connected
+		using a powerful <a href="docs/events" class="permalink">Event bus</a> that makes communcation between services
+		and modules easy.
+	</p>
+
+	<div class="row">
+		<div class="col-sm-3 col-sm-push-3">
+			<div class="alert alert-warning alert-inline text-center">Module</div>
+		</div>
+		<div class="col-sm-3 col-sm-push-3">
+			<div class="alert alert-warning alert-inline text-center">Module</div>
+		</div>
+		
+	</div>
+
+	<div class="row">
+		<div class="col-sm-2 col-sm-push-3">
+			<div class="alert alert-success text-center">Service</div>
+		</div>
+		<div class="col-sm-2 col-sm-push-3">
+			<div class="alert alert-success text-center">Service</div>
+		</div>
+		<div class="col-sm-2 col-sm-push-3">
+			<div class="alert alert-success text-center">Service</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-6 col-sm-push-3">
+			<div class="alert alert-info text-center">Core</div>
+		</div>
+	</div>
+
+	<p>
+		These components follow the <em>Separation of Concerns</em> and <em>Single Responsibility</em> patterns and help you keep
+		your application maintainable.
+	</p>
+</div>
+
+<div class="container">
+	<h2 class="get-started">Get started</h2>
+	<div class="row">
+		<div class="col-md-6 col-md-push-3"><div class="alert alert-success text-center">You need <strong>Node (and npm)</strong> and <strong>Yeoman</strong> for that.</div></div>
+	</div>
+	<div class="row">
+		<div class="col-md-10 col-md-push-1">
+			<p>Install <code>battle-backbone</code> with <code>npm</code></p>
+			
+			<pre><code>npm install -g generator-battle-backbone</code></pre>
+			
+			<p>You might need <code>sudo</code> for that</p>
+	
+			<p>Scaffold your application using Yeoman</p>
+			
+			<pre><code>yo battle-backbone</code></pre>
+			
+			<p>All dependencies will be installed automatically using <code>npm</code></p>
+	
+			<h4>Start coding</h4>
+			<% if( 'CoffeeScript' === lang.lang ) { %>
+			<p>
+				The Gruntfile contains tasks to compile your CoffeeScript to JavaScript and copy all 
+				files you have created. Your JavaScript version will then be available in the <code>build</code>
+				folder. <br />
+				grunt's default task will watch your <code>src</code> directory and compile whenever something gets
+				changed. It even has live reload enabled.
+			</p>
+			<% } %>
+		</div>
+	</div>
+
+</div>
+
+<div class="container panel-container">
+	<div class="row">
+		<div class="col-md-8 col-md-push-2">
+			<div class="panel panel-default">
+				<div class="panel-heading">Want to see a battle-backbone application in action?</div>
+				<div class="panel-body">You are already doing it.</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,137 @@
+<div class="container">
+	<h1>Routing</h1>
+
+	<p class="lead">
+		This section describes how routing is implemented in battle-backbone
+	</p>
+
+	<h3 class="ln-intro"><a href="docs/router/intro" class="permalink" data-silent="true">Introduction</a></h3>
+
+	<p>
+		Routing is a complex task in an application. There are a lot of good patterns and best practices
+		for routers in Backbone and Marionette. However, developers often run into problems when using
+		multiple routers and complex routes.
+	</p>
+
+	<p>
+		A common problem with routers is that they rely on side effects. Once instantiated, a router waits for
+		the route to be changed and triggers the desired behavior. However, by default you do not have a collection
+		of all routers that wait in the background. You don't even have to store router instances.
+	</p>
+
+	<p>
+		battle-backbone moves the navigation from routers to the event bus. That way, you have a clean and simple
+		API for route manipulation and route change handling and you do no longer have to care about complex router
+		classes or invalid application routes. It even allows you to write handlers invoked when leaving a route so
+		that you can fade out a view or make sure you do not produce memory leaks.
+	</p>
+
+	<h3 class="ln-terms"><a href="docs/router/terms" class="permalink" data-silent="true">Terminology</a></h3>
+
+	<p>
+		battle-backbone uses the terms <strong>language</strong>, <strong>base route</strong> and <strong>sub route</strong>.<br />
+		For your current route (<code><%-vent.request('language')%>/<%-vent.request('route:full')%></code>) this is:
+	</p>
+
+	<div class="row">
+		<div class="col-sm-2 col-sm-push-3">
+			<div class="panel panel-warning">
+				<div class="panel-heading text-center"><code><%- vent.request('language') %></code></div>
+				<div class="panel-body">
+					Identifies the language to use in the application.<br /><br />
+				</div>
+			</div>
+		</div>
+
+		<div class="col-sm-2 col-sm-push-3">
+			<div class="panel panel-success">
+				<div class="panel-heading text-center"><code><%- vent.request('route') %></code></div>
+				<div class="panel-body">
+					First part of the route. Used to find a module that handles the route.
+				</div>
+			</div>
+		</div>
+
+		<div class="col-sm-2 col-sm-push-3">
+			<div class="panel panel-primary">
+				<div class="panel-heading text-center"><code><%- vent.request('route:sub') %></code></div>
+				<div class="panel-body">
+					<em>Route arguments</em> given to the base route handler as an array.
+				</div>
+			</div>
+		</div>
+		
+	</div>
+
+	<h3 class="ln-idea"><a href="docs/router/idea" class="permalink" data-silent="true">The concept</a></h3>
+
+	<ul>
+		<li>
+			There is only <strong>one router</strong> that works in the background and catches all routes
+		</li>
+		<li>
+			<a href="docs/modules" class="permalink">Modules</a> are meant to handle routes. They can be bound
+			to a base route using the <a href="docs/core/config" class="permalink">module configuration</a> in the configuration
+			file.
+		</li>
+		<li>
+			Modules and their resources are not loaded until the route is requested. This way, the application loads faster
+			and transfers only the data that is really required. Combined with the <a href="docs/abstract/router" class="permalink">abstract Controller</a>
+			it gets even more powerful.
+		</li>
+		<li>
+			When leaving a route the currently active controller will be triggered using an event. The navigation waits for the 
+			controller to finish its work (e.g. animating a view).
+		</li>
+		<li>
+			After the module for the next route has been loaded, it will be instantiated if it has not been used before.<br />
+			A handler function will be triggered in the module.
+		</li>
+		<li>
+			The navigation service will fire an event to notify other parts of the application.
+		</li>
+		<li>
+			Both the <a href="docs/languages" class="permalink">language</a> and the route can be changed and obtained using requests.
+		</li>
+	</ul>
+
+	<div class="alert alert-success alert-inline">
+		Routing is implemented in <code>src/service/navigation.<%-lang.ext%></code>
+	</div>
+
+	<h3 class="ln-requests"><a href="docs/router/requests" class="permalink" data-silent="true">Requests</a></h3>
+
+	<p>
+		Changing the language or navigating to another route is done with requests on the event bus. Requesting
+		<code>navigate</code> with the new route will change the route and load the corresponding module in the background.
+		<code>navigate:silent</code> can be used to change the URL without triggering events. Use <code>change:language</code>
+		to update the user's language both in the URL and in the application.
+	</p>
+
+	<p>
+		There are also a couple of requests that return information about the current route and the language.
+	</p>
+
+	<div class="alert alert-warning alert-inline">
+		More information about routing requests can be found in the <a href="docs/events/list" class="permalink">Events and requests</a> section.
+	</div>
+
+	<div class="alert alert-warning alert-inline">
+		More information about language handling can be found in the <a href="docs/languages" class="permalink">Multi-language support</a> section.
+	</div>
+
+	<h3 class="ln-events"><a href="docs/router/events" class="permalink" data-silent="true">Events</a></h3>
+
+	<p>
+		The navigation service does not only trigger methods in the module controller
+		it also fires events to notify other components.<br />
+		<code>route:destroy</code> will be triggered when a route is left,
+		<code>route:show</code> will be triggered after triggering a handler function
+		in a module controller. Both get passed a base route and an array with sub routes.
+	</p>
+
+	<div class="alert alert-warning alert-inline">
+		More information about routing requests can be found in the <a href="docs/events/event-list" class="permalink">Events and requests</a> section.
+	</div>
+
+</div>

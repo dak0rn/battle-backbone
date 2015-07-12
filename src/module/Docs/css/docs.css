@@ -1,0 +1,93 @@
+.doc-header {
+	padding: 1em;
+	margin-bottom: 2em;
+}
+
+.doc-header h1 {
+	margin: 0.3em 0 !important;
+}
+
+.doc-header a.active {
+	font-weight: bold;
+	color: #ff7f50;
+}
+
+.doc-header h1 a:link,
+.doc-header h1 a:visited {
+	color: #444 !important;
+}
+
+.doc-header h1 a:focus,
+.doc-header h1 a:hover,
+.doc-header h1 a:active {
+	color: coral !important;
+}
+
+.doc-header h1 small {
+	color: #888;
+}
+
+.doc-header ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.docs-shield {
+	max-width: 300px;
+	display: block;
+	margin: 0 auto;
+}
+
+.section-title, .section-title > * {
+	text-align: right;
+	margin: 0 0 1em 0;
+}
+
+.content-list .row {
+	margin-bottom: 1.5em;
+}
+
+.panel-container {
+	margin-top: 4em;
+}
+
+.get-started,
+.pf-desc {
+	text-align: center;
+}
+
+.container img.cimg {
+	display: block;
+	margin: 0 auto;
+	max-width: 90%;
+	max-height: 500px;
+}
+
+.container > img,
+.container > p > img {
+	margin: 2em auto;
+}
+
+h3 .permalink {
+	color: #434a54 !important;
+}
+
+.create-srv-well {
+	text-align: center;
+	box-shadow: none !important;
+	border: #ccc 1px dashed !important;
+}
+
+.cont-list .col-md-4 > strong {
+	display: block;
+}
+
+.mg-top {
+	margin-top: 4em;
+}
+
+.btn-cookies {
+	font-size: 2em;
+	padding: 0.5em 1em;
+}

@@ -1,0 +1,1 @@
+define(["App"],function(e){return e.module("Service",function(r,n,o,t,u,i){return e.vent.once("start:app",function(){return require(["module/Footer/index"],function(){var r,n;return r=e.module("Footer").Controller,n=new r,n.triggerMethod("show:footer")})})})});

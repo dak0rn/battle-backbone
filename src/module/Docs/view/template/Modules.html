@@ -1,0 +1,221 @@
+<div class="container">
+	<h1>Modules</h1>
+	<p class="lead">
+		This section describes the module structure provided by battle-backbone
+	</p>
+	
+	<h3 class="ln-intro"><a href="docs/modules/intro" class="permalink" data-silent="true">Introduction</a></h3>
+	
+	<p>
+		Modules contain the application's business logic. They follow the <em>design by function</em> approach
+		since they encapsulate a single concern of an application.
+		
+		Modules can take advantage of a lazy loading mechanism that makes sure they (and the ressources they need)
+		are loaded when they are used.
+		
+		They are connected to the application using an event bus and can communicate with other
+		modules using it.
+	</p>
+	
+	<h3 class="ln-structure"><a href="docs/modules/structure" class="permalink" data-silent="true">Structure</a></h3>
+	
+	<p>
+		Modules are stored in the <code>src/modules</code> folder. Every modules has its own directory.
+		Per definition, every module has <code>index.<%-lang.ext%></code> file that is loaded automatically
+		when the corresponding route is triggered.
+	</p>
+	
+	<p>
+		Usually, every module has the same core structure:
+	</p>
+	
+	
+	<ul>
+		<li>Requiring <code>App</code> using require.js' <code>define()</code> function</li>
+		<li>Creating a new module <strong>that has the same name as the module's folder</strong></li>
+	</ul>
+	
+	<pre><%- lang.module_code %></pre>
+		
+	<div class="alert alert-success alert-inline">
+		battle-backbone makes use of <a href="http://marionettejs.com/docs/marionette.module.html">Marionette's module interface</a>
+		that allows you to define modules in an <code>Marionette.Application</code> instance.
+		The <code>App</code> returns an instance that can be used to define modules.<br />
+	</div>
+	
+	<p>
+		The module interface that modules are supposed to use has the advantage that the provided
+		callback function is given a lot of important requirements developers usually include. This way,
+		the <code>define()</code> call is kept very short and one does not accidentally use global versions
+		of jQuery or underscore/lodash.
+	</p>
+	
+	<h3 class="ln-loading"><a href="docs/modules/loading" class="permalink" data-silent="true">Loading other resources</a></h3>
+	
+	<p>
+		As said above, the <code>define()</code> call at the beginning of the file should be kept
+		short to keep the file readable. However, a module normally needs more ressources to work with. Usually,
+		these are not loaded using require.js but the <a href="docs/loading" class="permalink">Lazy Loading mechnism</a>
+		provided by the abstract controller. 
+	</p>
+	
+	<h3 class="ln-pub"><a href="docs/modules/pub" class="permalink" data-silent="true">Activating modules</a></h3>
+	
+	<p>
+		Once written, modules have to be integrated into the application. They have to be mapped to a route in
+		the <a href="docs/core/config" class="permalink">configuration file</a>.
+	</p>
+	
+	<div class="row">
+		<div class="col-md-6">
+			<p>
+				Given one has written a <em>class</em> named <code>DocsController</code> in the <code>Docs</code>
+				module located in the <code>src/modules/Docs/index.<%-lang.ext%></code> file and wants it to handle
+				every request to <code>docs/</code> the following entry has to be added to the configuration file:
+			</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<pre <% if( "coffee" !== lang.ext ) { %>class="hide"<% } %>>modules:
+	docs: 'Docs.DocsController@documentation'</pre>
+				
+			<pre <% if( "js" !== lang.ext ) { %>class="hide"<% } %>>modules: {
+	docs: 'Docs.DocsController@documentation'
+}</pre>
+		</div>
+		<div class="col-md-6">
+			<pre <% if( "coffee" !== lang.ext ) { %>class="hide"<% } %>>define ['App'], (App) ->
+	App.module 'Docs', (Module, a, Backbone, Marionette, $, _) ->
+        
+		Controller = App.module('Abstract').Controller
+		class Module.DocsController extends Controller
+            
+			onShowDocumentation: ->
+				// fancy documentation here</pre>
+				
+			<pre <% if( "js" !== lang.ext ) { %>class="hide"<% } %>>define(['App'], function(App) {
+
+	App.module('Docs', function(Module, a, Backbone, Marionette, $, _) {
+		
+		var Controller = App.module('Abstract').Controller;
+		
+		Module.DocsController = Controller.extend({
+			
+			onShowDocumentation: function() {
+				// fancy documentation here
+			}
+			
+		});
+	});
+});</pre>
+		</div>
+	</div>
+	
+	<p>
+		This entry tells battle-backbone that the class <code>DocsController</code> from the
+		module <code>Docs</code> in the file <code>src/modules/Docs/index.<%- lang.ext %></code> should be
+		instantiated and the event <code>show:documentation</code> should be triggered on it which will invoke
+		the function <code>onShowDocumentation()</code>.
+	</p>
+	
+	<h3 class="ln-events"><a href="docs/modules/events" class="permalink" data-silent="true">Route events</a></h3>
+	
+	<p>
+		After adding the module to the configuration file and setting an event (like <code>documentation</code> from the example
+		above) you have to write the functions that handles the route events.
+	</p>
+	
+	<div class="row">
+		<div class="col-md-6">
+			
+			<h4>Triggering a route</h4>
+			
+			<p>
+				When the configured route is triggered, the configured event prefixed by <code>show:</code> will be triggered on the controller
+				instance, for example <code>show:documentation</code>.<br />
+				Since Marionette's <code>triggerMethod()</code> function
+				is used the function <code>onShowDocumentation()</code> will be invoked automatically if available.
+			</p>
+		</div>
+		<div class="col-md-6">
+			<h4>Leaving a route</h4>
+			
+			<p>
+				When the route is left, the configured event prefixed by <code>destroy:</code> will be triggered on the controller
+				instance, for example <code>destroy:documentation</code>.<br />
+				Since Marionette's <code>triggerMethod()</code> function
+				is used the function <code>onDestroyDocumentation()</code> will be invoked automatically if available.
+			</p>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-6">
+			<p>
+				The route handler function will get the following <strong>arguments</strong>:
+			</p>
+			
+			<ol>
+				<li>
+					An array with sub routes<br />
+					<!--<strong>Example:</strong><br />
+					If the sub route is <code>a/b/c</code> the function will get
+					<code>['a','b','c']</code>-->
+				</li>
+			</ol>
+			
+			<div class="alert alert-warning alert-inline">
+				Lazy loading of resources used by the module is not implemented in the
+				navigation service. Please refer to the <a href="docs/loading" class="permalink">Lazy Loading chapter</a>
+				for more information about that.
+			</div>
+		</div>
+		<div class="col-md-6">
+			<p>
+				The function will be passed the following <strong>arguments</strong>:
+			</p>
+			
+			<ol>
+				<li>The base route of the next route</li>
+				<li>An array with the next sub routes</li>
+			</ol>
+			
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<p>
+				<strong>Example:</strong><br />
+				If the route <code>docs/a/b/c/</code> is requested the first part (<code>docs</code>) is the base route. It identifies
+				the controller and the event and is <strong>not</strong> given the handler function. It will get the array
+				<code>['a','b','c']</code>
+			</p>
+		</div>
+		<div class="col-md-6">
+			<p>
+				<strong>Example:</strong><br />
+				If the next route is <code>docs/core/app</code> the function will get <code>docs</code> and <code>['core','app']</code>.
+			</p>
+		</div>
+	</div>
+	<div class="row">	
+			
+		<div class="col-md-6">
+			<p>
+				<strong>Return value:</strong><br />
+				The show function can return a <strong>promise</strong>. It will not affect the navigation but it will be
+				given back to the invoker of the <code>navigate</code> request.
+			</p>
+		</div>
+		<div class="col-md-6">
+			<p>
+				<strong>Return value:</strong><br />
+				The destroy handler can return a <strong>promise</strong> and the navigation will wait until it is resolved or
+				rejected (it is not possible here to stop the navigation). This allows you to perform animation when leaving a route.
+			</p>
+		</div>
+	</div>
+	
+</div>
+

@@ -1,0 +1,1 @@
+define(["App"],function(e){return e.module("Service",function(t,n,i,r,u,c){return t.title=function(e){return document.title=e},e.vent.reply("change:title",t.title)})});

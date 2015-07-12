@@ -1,0 +1,69 @@
+.home-header {
+	text-align: center;
+}
+.header-label {
+	font-size: 1.5em;
+	margin-top: 1.5em;
+}
+.home-view .container {
+	margin-bottom: 3em;
+}
+.view-container > h2 {
+	text-align: center;
+}
+.panels-view .row {
+	margin-top: 3.5em;
+}
+.docs-link {
+	font-size: 1.4em;
+	display: block;
+}
+.text-center {
+	text-align: center;
+}
+.steps {
+	margin-top: 2em;
+}
+span.num {
+	color: #fff;
+	background-color: #ccc;
+	border-radius: 2em;
+	width: 2em;
+	display: block;
+	height: 2em;
+	text-align: center;
+	font-size: 1.4em;
+	font-weight: bold;
+	line-height: 2em;
+	margin: 1.5em auto 0 auto;
+}
+.timeline dd .circ,
+.timeline dd .time {
+	opacity: 0.4;
+	transition: opacity 0.3s;
+}
+.timeline dd:hover .circ,
+.timeline dd:hover .time {
+	opacity: 1;
+}
+.timeline .events {
+	background: #eee !important;
+}
+.pos-left .events:before {
+	border-color: transparent transparent transparent #eee !important;
+}
+.pos-right .events:before {
+	border-color: transparent #eee transparent transparent !important;
+}
+.blocker { display: block; height: 2.5em; }
+.lh { line-height: 1.8em; }
+@media (max-width: 768px) {
+	.timeline dl dd.pos-right .events:before,
+	.timeline dl dd.pos-left .events:before {
+		display: none !important;
+	}
+}
+.shield {
+	max-width: 300px;
+	max-height: 300px;
+}

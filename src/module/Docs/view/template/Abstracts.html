@@ -1,0 +1,186 @@
+<div class="container">
+	<h1>Abstract classes</h1>
+	<p class="lead">This section describes abstract classes provided by battle-backbone</p>
+
+	<h3 class="ln-controller"><a href="docs/abstract/controller" class="permalink" data-silent="true">Controller</a></h3>
+
+	<p>
+		The abstract controller located in <code>src/abstract/Controller.<%-lang.ext%></code>
+		provides you a simple way to implement lazy loading for methods within a controller.
+	</p>
+	<p>
+		Basically, it is a <code>Marionette.Object</code> (thus, it has event support) that
+		uses a <code>.handlers</code> property to map functions to a list of resources
+		to load before invoking the function. Modules can use that to lazy load their resources.
+	</p>
+
+	<div class="alert alert-success alert-inline">
+		The Controller is available in the <code>Abstract</code> module of the application.
+	</div>
+
+	<div class="row">
+		<div class="col-md-6">
+			<ul>
+				<li>
+					The abstract controller expects the <code>.handler</code> property to be
+					an object that maps a function name to an array of resources or a function
+					that returns such an object.
+				</li>
+				<li>
+					It will overwrite the function with a function that loads the given resources
+					and passes them to the original function.</li>
+				<li>
+					Loaded resources are <strong>appended</strong> to the arguments list so that parameters
+					given to the function from the outside don't get lost.</li>
+				<li>
+					Overwritten functions always return a <strong>promise</strong> (jQuery Deferred)
+					that is resolved with the return value of the original function.<br />
+					The original function also can return a promise that is then used instead.
+				</li>
+			</ul>
+			
+		</div>
+		<div class="col-md-6">
+			<% if( 'coffee' === lang.ext ) { %>
+			<pre>define ['App'], (App) ->
+	
+	App.module 'LazyModule', (Module, app, Backbone, Marionette, $, _) ->
+
+		ControllerClass = App.module('Abstract').Controller
+
+		class Module.Controller extends ControllerClass
+
+			handlers:
+				# Load resources before invoking `onShowPage`
+				onShowPage: ['module/LazyModule/view/View']
+
+			# This function gets the loaded view
+			onShowPage: (View) ->
+				# ...</pre>
+			<% } else { %>
+			<pre>define(['App'], function(App) {
+	
+	App.module('LazyModule', function(Module, app, Backbone, Marionette, $, _) {
+
+		var ControllerClass = App.module('Abstract').Controller;
+
+		Module.Controller = ControllerClass.extend({
+
+			handlers: {
+				// Load resources before invoking `onShowPage`
+				onShowPage: ['module/LazyModule/view/View']
+			},
+
+			onShowPage: function(View) {
+				// ...
+			}
+		});
+	});
+});</pre>
+			<% } %>
+		</div>
+	</div>
+
+	<div class="alert alert-warning alert-inline">
+		When defining a list of resources to load you always have to use the <strong>full path</strong>!
+		Internally, require.js is used and it does not support <code>require()</code> with relative paths.
+	</div>
+
+	<div class="alert alert-danger alert-inline">
+		If you overwrite the <code>initialize()</code> function make sure you call the parent function!<br />
+		<% if( 'js' === lang.ext ) { %>
+		<code>ControllerClass.prototype.initialize.apply(this, arguments);</code>
+		<% } else { %>
+		<code>ControllerClass::initialize.apply this, arguments</code>
+		<% } %>
+	</div>
+
+	<h3 class="ln-rest"><a href="docs/abstract/rest" class="permalink" data-silent="true">Model / Collection</a></h3>
+
+	<p>
+		Backbone makes it quite easy to work with a REST API; models and collections provide functions for
+		retrieving (e.g. <code>.fetch()</code>), storing (e.g. <code>.save()</code>)
+		and deleting information (<code>.destroy()</code>) on a server.
+	</p>
+
+	<p>
+		All you have to do is to provide the URL to the API and the corresponding endpoint in the collection
+		or the model. This has a downside, though: if the API URL changes you have to update a lot of code.
+	</p>
+
+	<p>
+		In battle-backbone you store the base path of your API in the <a href="docs/core/config" class="permalink">configuration file</a>
+		and use a special property named <code>endpoint</code> in your models or collections. If you want to
+		communicate with the API its base path is prepended to the given endpoint automatically.
+	</p>
+
+	<div class="row">
+		<div class="col-md-6">
+			<h4>In the configuration file</h4>
+			<% if( 'coffee' === lang.ext ) { %>
+			<pre>	# ...
+	api: 'https://api.example.org/'
+	# ...</pre>
+			<% } else { %>
+			<pre>{
+	// ...
+	api: 'https://api.example.org/',
+	// ...
+}</pre>
+			<% } %>
+		</div>
+		<div class="col-md-6">
+			<h4>In a model</h4>
+			<% if( 'coffee' === lang.ext ) { %>
+			<pre>class Settings extends App.module('Abstract').Model
+	endpoint: 'settings'
+	# ...</pre>
+			<% } else { %>
+			<pre>var Settings = App.module('Abstract').Model.extend({
+	endpoint: 'settings',
+
+	// ...
+});</pre>
+			<% } %>
+		</div>
+
+	</div>
+
+	<p>
+		It also makes sure to append the model's unique ID if it has one:
+	</p>
+
+	<% if( 'coffee' === lang.ext ) { %>
+	<pre>settings = new Settings;
+settings.isNew() // true
+settings.url()   // https://api.example.org/settings
+
+settings.set settings.idAttribute, 3
+settings.isNew() // false
+settings.url()   // https://api.example.org/settings/3</pre>
+	<% } else { %>
+	<pre>var settings = new Settings();
+settings.isNew(); // true
+settings.url();   // https://api.example.org/settings
+
+settings.set(settings.idAttribute, 3);
+settings.isNew(); // false
+settings.url();   // https://api.example.org/settings/3</pre>
+	<% } %>
+
+	<div class="alert alert-warning alert-inline">
+		If you want to change the way URLs are constructed you have to edit <code>src/abstract/Model.<%-lang.ext%></code> or
+		<code>src/abstract/Collection.<%-lang.ext%></code> respectively.
+	</div>
+
+	<div class="alert alert-warning alert-inline">
+		If your model or collection needs a completely independent URL just overwrite the <code>.url</code>
+		property as usual.
+	</div>
+
+	<div class="alert alert-success alert-inline">
+		It is also possible to provide a function for <code>endpoint</code> that returns the endpoint 
+	</div>
+
+
+</div>

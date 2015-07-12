@@ -1,0 +1,152 @@
+<div class="container">
+	<h1>Behaviors</h1>
+	<p class="lead">Thie section describes behaviors provided by battle-backbone</p>
+
+	<p>
+		Behaviors, a feature provided by <a href="http://marionettejs.com/docs/marionette.behaviors.html">Marionette</a>
+		allows you to move view logic to separate modules to keep your code DRY and simple. The following behaviors
+		are included in battle-backbone by default:
+	</p>
+
+	<div class="cont-list">
+		
+		<div class="row">
+			<div class="col-md-3">
+				<h4>AutoLinkBehavior</h4>
+			</div>
+			<div class="col-md-9">
+				<p>
+					Enables you to embed in-application links in your views that trigger the
+					<code>navigate</code> event when clicked.
+				</p>
+				<h5>Properties:</h5>
+				<div class="row">
+					<div class="col-md-3"><code>selector</code></div>
+					<div class="col-md-5">jQuery selector for in-application link items</div>
+					<div class="col-md-4">Default value: <code>'.autolink'</code></div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-3"><code>data</code></div>
+					<div class="col-md-5">Name of the attribute containing the URL to navigate to</div>
+					<div class="col-md-4">Default value: <code>'data-href'</code></div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-3"><code>silentData</code></div>
+					<div class="col-md-5">Name of an attribute that uses silent navigation if present.</div>
+					<div class="col-md-4">Default value: <code>'data-silent'</code></div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-3">
+				<h4>FadeBehavior</h4>
+			</div>
+			<div class="col-md-9">
+				<p>
+					The <code>FadeBehavior</code> enables you to write views that can be faded in and out.
+					They will be made invisible (<code>opacity = 0</code>) when rendered and can be faded with
+					the events <code>fade:in</code> and <code>fade:out</code> triggered on the view using
+					<code>.triggerMethod()</code>. Both functions can be a given a promise that will be resolved
+					after the animation finished.
+				</p>
+				<h5>Properties:</h5>
+				<div class="row">
+					<div class="col-md-3"><code>duration</code></div>
+					<div class="col-md-5">Animation duration in milliseconds</div>
+					<div class="col-md-4">Default value: <code>200</code></div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<h3 class="ln-example"><a href="docs/behaviors/example" class="permalink" data-silent="true">Example</a></h3>
+
+	<p>
+		Here is an example view that uses the <strong>AutoLinkBehavior</strong>
+	</p>
+
+	<div class="row">
+		<div class="col-md-8 col-md-push-2">
+			<% if( 'coffee' === lang.ext ) { %>
+			<pre>define [
+	'App',
+	'text!./template/view-template.html',
+	'i18n!../nls/locale'
+], (App, html, locale) ->
+
+	App.module 'SomeModule', (Module, a, Backbone, Marionette, $, _) ->
+
+		class Module.View extends Marionette.ItemView
+
+			template: _.template html
+
+			templateHelpers: lang:locale
+
+			behaviors:
+				AutoLinkBehavior:
+					selector: 'a.permalink'
+					data: 'href'
+</pre>
+		<% } else { %>
+		<pre>define([
+	'App',
+	'text!./template/view-template.html',
+	'i18n!../nls/locale'
+], function(App, html, locale) {
+
+	App.module('SomeModule', function(Module, a, Backbone, Marionette, $, _) {
+
+		Module.View = Marionette.ItemView.extends({
+			
+			template: _.template(html),
+			
+			templateHelpers: {
+				lang: locale
+			},
+
+			behaviors: {
+				AutoLinkBehavior: {
+					selector: 'a.permalink',
+					data: 'href'
+				}
+			}
+		});
+	});
+});
+</pre>
+		<% } %>
+		</div>
+	</div>
+
+	<p>
+		To make the view visible you have to fire the event mentioned above:
+	</p>
+
+	<div class="row">
+		<div class="col-md-8 col-md-push-2">
+			<% if( 'coffee' === lang.ext ) { %>
+			<pre>view = new Module.View
+promise = $.Deferred()
+
+myLayout.getRegion('main').show view
+view.triggerMethod 'fade:in', promise
+
+promise.done -> console.log 'View is now visible'</pre>
+		<% } else { %>
+		<pre>var view = new Module.View();
+var promise = $.Deferred();
+
+myLayout.getRegion('main').show(view);
+view.triggerMethod('fade:in', promise);
+
+promise.done( function() {
+	console.log('View is now visible');
+});</pre>
+		<% } %>
+		</div>
+	</div>
+</div>

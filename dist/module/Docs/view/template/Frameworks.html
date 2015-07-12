@@ -1,0 +1,118 @@
+<div class="container">
+	<h1>Third-party components</h1>
+	<p class="lead">This section describes what third party components are included in battle-backbone</p>
+
+	<h3 class="ln-intro"><a href="docs/frameworks/intro" class="permalink" data-silent="true">Introduction</a></h3>
+
+	<p>
+		Since battle-backbone is neither a library or a framework but a toolbox that provides you with
+		battle-tested best practices and common development patterns for single page applications it
+		contains third-party dependencies. This page gives you a list of libraries and frameworks used
+		by battle-backbone and describes reasons why they are included.
+	</p>
+</div>
+
+<div class="container mg-top">
+	<div class="cont-list">
+
+		<div class="row">
+			<div class="col-md-3">
+				<h4>Backbone</h4>
+			</div>
+			<div class="col-md-9">
+				Backbone is the core framework that powers battle-backbone. We use it for our
+				applications since it is small, understandable, very well documented and can be extended
+				easily.
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3">
+				<h4>Marionette</h4>
+			</div>
+			<div class="col-md-9">
+				Backbone provides only a few things and you often need complex structures like
+				nested views or views that render collections. Marionette provides all this and adds
+				useful components like a modularization interface and behaviors.
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3">
+				<h4>Backbone.Radio</h4>
+			</div>
+			<div class="col-md-9">
+				Marionette comes with Backbone.Wreqr as event system. Backbone.Radio provides basically
+				the same but uses a cleaner and more intuitive interface and replaces Wreqr in battle-backbone.
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3">
+				<h4>lodash</h4>
+			</div>
+			<div class="col-md-9">
+				Backbone usually uses <a href="http://underscorejs.com">underscore</a> as utility and abstraction
+				library. It has been replaced with the API-compatible lodash that provides more functionality
+				and is believed to be faster in some cases.
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3">
+				<h4>jQuery</h4>
+			</div>
+			<div class="col-md-9">
+				In addition to underscore (or lodash) Backbone needs jQuery or an API compatible library like
+				zepto. We use jQuery here because it can be integrated easily and provides many things developers
+				use regularily. It also has a large plugin base 
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3">
+				<h4>require.js</h4>
+			</div>
+			<div class="col-md-9">
+				JavaScript does not provide a module system that can be used by browsers today and ES5 doesn't provide
+				a module system at all. While there are a couple of module system for front-end development require.js
+				provides us with bundling, plugins and dynamic loading of resources.
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3">
+				<h4>require-css</h4>
+			</div>
+			<div class="col-md-9">
+				This plugin for require.js enables modules to load their own CSS without being forced to write
+				on large centralized CSS file.
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3">
+				<h4>require.js i18n</h4>
+			</div>
+			<div class="col-md-9">
+				This plugin makes it easy to load localization files based on the currently set language without
+				the need to write complex loading logic somewhere.
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3">
+				<h4>Grunt</h4>
+			</div>
+			<div class="col-md-9">
+				Grunt is used as task runner because it has lots of plugins, is easy to understand for new
+				team members and it supports the require.js optimizer <em>r.js</em> without any hacks.<br />
+				You can find more information in the <a href="docs/grunt" class="permalink">Toolchain section</a>.
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3">
+				<h4>CoffeeScript</h4>
+			</div>
+			<div class="col-md-9">
+				Originally, battle-backbone was written in CoffeeScript because it provides a neat syntax
+				that is easy to read and understandle and looks a lot less messy than JavaScript in many cases.<br />
+				However, since CoffeeScript cannot be used everywhere there is also a <em>native</em> JavaScript version
+				of battle-backbone that is not compiled from CoffeeScript but manually written.
+			</div>
+		</div>
+		
+	</div>
+</div>

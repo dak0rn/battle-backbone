@@ -1,0 +1,3 @@
+define(
+	lang: "JavaScript"
+);

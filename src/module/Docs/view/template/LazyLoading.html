@@ -1,0 +1,58 @@
+<div class="container">
+	<h1>Lazy loading</h1>
+	<p class="lead">This section describes how battle-backbone allows you to use lazy loading for your application</p>
+
+	<h3 class="ln-intro"><a href="docs/loading/intro" class="permalink" data-silent="true">Introduction</a></h3>
+
+	<p>
+		Lazy loading makes an application faster and more modular because the client only loads resources
+		when they are really required. battle-backbone provides you with two lazy loading mechanism out of the box.
+	</p>
+
+	<div class="row">
+		<div class="col-md-6">
+			<h4>Lazy module loading</h4>
+			<p>
+				The <code>navigation</code> services provides you with lazy loading
+				of modules where you bind a module controller to a route. The module and all of
+				its dependencies will not be loaded until the route is requested.
+			</p>
+			<p>
+				More information: <a href="docs/modules" class="permalink">Lazy module loading</a>
+			</p>
+		</div>
+		<div class="col-md-6">
+			<h4>Lazy resource loading</h4>
+			<p>
+				In addition to loading modules dynamically you can also load resources
+				when a function is invoked. This allows you to write a multi-purpose controller
+				that loads its resources only when they are required.
+			</p>
+			<p>
+				More information: <a href="docs/abstract/controller" class="permalink">Lazy resources loading</a>
+			</p>
+		</div>
+	</div>
+
+	<h3 class="ln-combined text-center"><a href="docs/loading/combined" class="permalink" data-silent="true">Combined</a></h3>
+
+	<p>
+		You usually combine these two approaches when writing modules:
+	</p>
+
+	<ul>
+		<li>Module bundles are loaded lazily using the <code>navigation</code> service and the configuration file.</li>
+		<li>When the module is loaded an event will be triggered on it. The function invoked by this event will
+		load the required resources.</li>
+	</ul>
+
+	<p>
+		This allows you to write a controller that handles multiple routes (e.g. <code>login</code> and <code>logout</code>)
+		but loads the resources for every route only if they are really required.
+	</p>
+
+	<div class="alert alert-inline alert-success">
+		Also read <a class="permalink" href="docs/howto-modules">How to write a module</a>.
+	</div>
+
+</div>

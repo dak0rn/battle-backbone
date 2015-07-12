@@ -1,0 +1,32 @@
+.gray-header {
+	background: #eee;
+	padding: 5em 1em;
+}
+
+
+pre code, pre {
+	tab-size: 4;
+	word-wrap: normal !important;
+	overflow: hidden;
+}
+
+.alert-inline {
+	margin: 2em 0;
+	overflow: auto;
+}
+
+main li,
+main dd,
+main dt {
+	line-height: 2em;
+}
+
+.cont-list h4 {
+	margin-top: 0;
+}
+
+.cont-list .row {
+	margin-bottom: 1.5em;
+	padding-bottom: 1.5em;
+	border-bottom: #eee 1px solid;
+}

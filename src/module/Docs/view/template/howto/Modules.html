@@ -1,0 +1,402 @@
+<div class="container">
+	<h1>How to write modules</h1>
+	<p class="lead">This section demonstrates how to write a battle-backbone module</p>
+
+	
+
+	<div class="row">
+		<div class="col-md-3">
+			<p><strong>Related articles</strong></p>
+			<ul>
+				<li><a href="docs/core/config" class="permalink">Configuration file</a></li>
+				<li><a href="docs/modules" class="permalink">Modules</a></li>
+			</ul>
+		</div>
+		<div class="col-md-3">
+			<p>
+				<strong>This example demonstrates how to</strong>
+			</p>
+
+			<ul>
+				<li>write a module</li>
+				<li>connect a module to a route</li>
+				<li>use the event bus</li>
+				<li>use lazy loading</li>
+			</ul>
+		</div>
+	</div>
+
+	<p>
+		The module that is going to be written should be invoked when the <code>cookie</code> route is triggered.
+		It should list some information about the route, the language and the configuration file. It also should
+		provide a dialog that let us trigger the event bus.
+	</p>
+
+	<div class="alert alert-warning alert-inline">
+		This is the <strong><%- lang.lang %></strong> version of the tutorial.
+		If you want to use <%- ('coffee' === lang.ext ? 'JavaScript' : 'CoffeeScript') %> you can change
+		the language using the link in the navigation.
+	</div>
+
+	<h3 class="ln-assumptions"><a href="docs/howto-modules/assumptions" class="permalink" data-silent="true">Assumptions</a></h3>
+
+	<ul>
+		<li>You are familiar with <%- lang.lang %></li>
+		<li>You are familiar with the tools listed <a href="docs/frameworks" class="permalink">here</a></li>
+		<li>You have a webserver running and battle-backbone works</li>
+	</ul>
+
+	<h3 class="ln-create"><a href="docs/howto-modules/create" class="permalink" data-silent="true">#1 Create a new module</a></h3>
+
+	<p>
+		Create a new module folder in <code>src/modules</code> named <code>Cookie</code>. Create a <code>index.<%-lang.ext%></code>
+		file in there. You can also create folders for views, templates and modules so that you have to following structure:
+	</p>
+
+	<pre>src
+	modules
+		Cookie
+			index.<%-lang.ext%>
+			model
+			view
+				template</pre>
+
+	<h3 class="ln-ctrl"><a href="docs/howto-modules/ctrl" class="permalink" data-silent="true">#2 Write the controller</a></h3>
+
+	<p>
+		Next, open <code>src/modules/Cookie/index.<%-lang.ext%></code> and write the usual module code. Since the folder name
+		is <code>Cookie</code> our module controller will create a module with the name <code>Cookie</code> and a class
+		named <code>CookieController</code> in it.
+	</p>
+
+	<% if('coffee' === lang.ext ) { %>
+	<pre>define ['App'], (App) ->
+	
+	App.module 'Cookie', (Module, a, Backbone, Marionette, $, _ ) ->
+
+		class Module.CookieController extends App.module('Abstract').Controller
+
+</pre>
+	<% } else { %>
+	<pre>define(['App'], function(App) {
+	
+	App.module('Cookie', function(Module, a, Backbone, Marionette, $, _ ) {
+
+		Module.CookieController = App.module('Abstract').Controller.extend({
+
+		});
+	});
+});
+</pre>
+	<% } %>
+	
+	<div class="alert alert-warning alert-inline">
+		The function parameter <code>a</code> is the application the module is created in.
+		Since it is already stored in <code>App</code> we keep the argument name as short as possible.
+	</div>
+
+	<p>
+		We want the events <code>show:cookies</code> and <code>destroy:cookies</code> to be fired on the controller. They
+		indicate that the controller should now handle a route. These events automatically invoke <code>onShowCookies</code>
+		and <code>onDestroyCookies</code>. The former is supposed to render a view. This view has to be loaded.
+	</p>
+
+	<p>
+		We could add the view as a dependency to the <code>define()</code>. This would load the view when the 
+		module is loaded. battle-backbone provides a feature that allows use to load resources when a function
+		is invoked. All we have to do is adding entry to the <code>handlers</code> property in our controller.
+	</p>
+
+	<% if('coffee' === lang.ext ) { %>
+	<pre>define ['App'], (App) ->
+	
+	App.module 'Cookie', (Module, a, Backbone, Marionette, $, _ ) ->
+
+		class Module.CookieController extends App.module('Abstract').Controller
+
+			handlers:
+				# Function name       Resources to load
+				onShowCookies:		['module/Cookie/view/CookieView']
+
+			onShowCookies: ->
+				# ...
+
+			onDestroyCookies: ->
+				# ...
+
+</pre>
+	<% } else { %>
+	<pre>define(['App'], function(App) {
+	
+	App.module('Cookie', function(Module, a, Backbone, Marionette, $, _ ) {
+
+		Module.CookieController = App.module('Abstract').Controller.extend({
+			handlers: {
+				onShowCookies: ['module/Cookie/view/CookieView']
+			},
+
+			onShowCookies: function() {},
+
+			onDestroyCookies: function() {}
+		});
+
+	});
+});
+</pre>
+	<% } %>
+
+	<p>
+		Whenever <code>onShowCookies</code> gets executed the parent class automatically requires
+		<code>module/Cookie/view/CookieView</code> and passes whatever it defines to the function
+		as an argument.
+	</p>
+
+	<div class="alert alert-warning alert-inline">
+		You have to provide the full path in the resources array. <a href="docs/abstract/controller" class="permalink">More information</a>
+	</div>
+	<div class="alert alert-warning alert-inline">
+		The loaded resources are <strong>appended</strong> to the arguments list of <code>onShowCookies</code>. Arguments given from
+		the outside will still be accessible.
+	</div>
+
+	<p>
+		Next, we want to work with the view. We will store it in a variable accessible to all functions called <code>view</code>.
+		The view will create a class named <code>CookieView</code> and attach it to the module <code>Cookie</code> that is already
+		referenced with the <code>Module</code> variable.
+	</p>
+
+	<div class="alert alert-success alert-inline">
+		Since we rely heavily on Marionette modules we do not have to care about the return values of
+		the file loaded by the controller before invoking the function. That keeps our argument lists
+		very short.
+	</div>
+	
+	<% if('coffee' === lang.ext ) { %>
+	<pre>define ['App'], (App) ->
+	
+	App.module 'Cookie', (Module, a, Backbone, Marionette, $, _ ) ->
+
+		class Module.CookieController extends App.module('Abstract').Controller
+
+			view: null
+
+			handlers:
+				# Function name       Resources to load
+				onShowCookies:		['module/Cookie/view/CookieView']
+
+			onShowCookies: ->
+				@view = new Module.CookieView
+
+				@listenTo @view, 'navigate', (where) => @vent.request 'navigate', where
+
+				@vent.request('layout').getRegion('main').show @view
+				@view.triggerMethod 'fade:in'
+
+			onDestroyCookies: ->
+				promise = $.Deferred()
+
+				@view.triggerMethod 'fade:out', promise
+
+				promise</pre>
+	<% } else { %>
+	<pre>define(['App'], function(App) {
+	
+	App.module('Cookie', function(Module, a, Backbone, Marionette, $, _ ) {
+
+		Module.CookieController = App.module('Abstract').Controller.extend({
+
+			view: null,
+
+			handlers: {
+				onShowCookies: ['module/Cookie/view/CookieView']
+			},
+
+			onShowCookies: function() {
+				this.view = new Module.CookieView();
+
+				this.listenTo( this.view, 'navigate', function(where) {
+					this.vent.request('navigate', where);
+				});
+
+				this.vent.request('layout').getRegion('main').show( this.view );
+				this.view.triggerMethod('fade:in');
+			},
+
+			onDestroyCookies: function() {
+				var promise = $.Deferred();
+
+				this.view.triggerMethod('fade:out', promise);
+
+				return promise;
+			}
+
+		});
+
+	});
+});
+</pre>
+	<% } %>
+	<div class="row">
+		<div class="col-md-6">
+			<h5>onShowCookies</h5>
+			<ul>
+				<li>Creates a new <code>CookieView</code></li>
+				<li>
+					Listens to the <code>navigate</code> event.<br />
+					If it is triggered the given argument is forwarded as a <code>navigate</code> request.
+					This will trigger a route change.
+				</li>
+				<li>
+					Requests the application layout using the event bus, takes the <code>main</code>
+					region and renders the view in it.
+				</li>
+				<li>
+					Triggers the <code>fade:in</code> event on it what fades in the view if it uses
+					the <code>FadeBehavior</code>.
+				</li>
+			</ul>
+		</div>
+		<div class="col-md-6">
+			<h5>onDestroyCookies</h5>
+			<ul>
+				<li>Creates a jQuery Deferred</li>
+				<li>
+					Triggers the <code>fade:out</code> event on the view what makes the view
+					invisible. The given promise is resolved after the animation.
+				</li>
+				<li>
+					The promise is returned.<br />
+					This will tell the navigation to wait until it is resolved.
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<h3 class="ln-view"><a href="docs/howto-modules/view" class="permalink" data-silent="true">#3 Write the view</a></h3>
+
+	<p>
+		Let's write the view before we do anything with it. Create the view file named <code>CookieView.<%-lang.ext%></code> in the
+		<code>view</code> folder. It will load an HTML template and provide some triggers.
+	</p>
+	
+	<% if('coffee' === lang.ext ) { %>
+	<pre>define ['App', 'text!./template/CookieView.html'], (App, html) ->
+	
+	App.module 'Cookie', (Module, a, Backbone, Marionette, $, _ ) ->
+
+		class Module.CookieView extends Marionette.ItemView
+			template: _.template html
+
+			ui:
+				'navigateButton': '.submit'
+				'routeInput': '.route'
+
+			events:
+				'click @ui.navigateButton': 'navigate'
+
+			behaviors:
+				FadeBehavior: {}
+
+			navigate: (e) ->
+				e.preventDefault()
+				e.stopPropagation()
+
+				route = @ui.routeInput.val()
+
+				@trigger 'navigate', route unless '' is route</pre>
+	<% } else { %>
+	<pre>define(['App', 'text!./template/CookieView.html'], function(App, html) {
+	
+	App.module('Cookie', function(Module, a, Backbone, Marionette, $, _ ) {
+
+		Module.CookieView = Marionette.ItemView.extend({
+			template: _.template(html),
+
+			ui: {
+				'navigateButton': '.submit'
+				'routeInput': '.route'
+			},
+
+			events: {
+				'click @ui.navigateButton': 'navigate'
+			},
+
+			behaviors: {
+				FadeBehavior: {}
+			},
+
+			navigate: function(e) {
+				e.preventDefault();
+				e.stopPropagation();
+
+				var route = this.ui.routeInput.val();
+
+				if( '' !== route )
+					this.trigger('navigate', route);
+			}
+		});
+
+	});
+
+});</pre>
+	<% } %>
+	<p>
+		The view renders an HTML template and triggers an event if the button has been
+		clicked.
+	</p>
+
+	<p>
+		The template in <code>module/Cookie/view/template/CookieView.html</code>:
+	</p>
+
+	<pre>&lt;h1&gt;Hello world&lt;/h1&gt;
+&lt;input type="text" class="route" placeholder="Where to route?" /&gt;
+&lt;button class="submit"&gt;Route!&lt;/button&gt;</pre>
+	
+	<p>
+		The view uses the <code>FadeBehavior</code> that provides fading in and fading out of views.
+		It also waits for the user to click the button, grabs the entered text and fires the
+		<code>navigate</code> event if the text is not empty. This event is catched in the controller.
+	</p>
+
+	<div class="alert alert-info alert-inline">
+		We omitted a model here to keep the example short.
+	</div>
+
+	<h3 class="ln-register"><a href="docs/howto-modules/register" class="permalink" data-silent="true">#4 Register the model</a></h3>
+
+	<p>
+		Now that both the view and the controller are ready we have to tell battle-backbone about the module.
+		Open the <code>config.<%-lang.ext%></code> file and add an entry for the route <code>cookies</code>:
+	</p>
+
+	<% if( 'coffee' === lang.ext ) { %>
+	<pre>	modules:
+		# ...
+		cookies: 'Cookie.CookieController@cookies'</pre>
+	<% } else { %>
+	<pre>	modules: {
+		// ...
+		cookies: 'Cookie.CookieController@cookies'
+	}</pre>
+	<% } %>
+
+	<ul>
+		<li>Registers a handler for the route <code>cookies</code></li>
+		<li><code>:</code></li>
+		<li>If requested use the class <code>CookieController</code> from the module <code>Coookie</code></li>
+		<li><code>@</code></li>
+		<li>Fire the <code>show:cookies</code> events on it</li>
+	</ul>
+
+	<div class="alert-warning alert alert-inline">
+		Per definition the <strong>folder name</strong> must match the <strong>name of the module</strong>.
+	</div>
+
+	<p>
+		You now can access the <code>cookies</code> route to see the module in action.
+	</p>
+
+	<div class="text-center"><a href="cookies" class="btn btn-cookies permalink btn-primary">/cookies</a></div>
+
+</div>

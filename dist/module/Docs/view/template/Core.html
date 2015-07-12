@@ -1,0 +1,280 @@
+<div class="container">
+	<h1>Core</h1>
+	<p class="lead">This section describes the core components of battle-backbone</p>
+	
+	<h3 class="ln-intro"><a href="docs/core/intro" class="permalink" data-silent="true">Introduction</a></h3>
+	<p>
+		battle-backbone is meant to be very flexible and modularized. Thus, it is powered
+		by a very small core that provides nothing more than some configuration, a simple
+		initialization routine and a way to extend the core. The core consists of three components:
+	</p>
+
+	<div class="row">
+		<div class="col-sm-4 ">
+			<div class="panel panel-warning">
+				<div class="panel-heading text-center">App</div>
+				<div class="panel-body">
+					The <code>Marionette.Application</code> that represents your application
+				</div>
+			</div>
+		</div>
+
+		<div class="col-sm-4 ">
+			<div class="panel panel-success">
+				<div class="panel-heading text-center">config</div>
+				<div class="panel-body">
+					The configuration file containing module and service settings and other configuration items
+				</div>
+			</div>
+		</div>
+
+		<div class="col-sm-4 ">
+			<div class="panel panel-primary">
+				<div class="panel-heading text-center">loader</div>
+				<div class="panel-body">
+					An application loader that configures the dependency management and preloads resources
+				</div>
+			</div>
+		</div>
+		
+	</div>
+	
+	<h3 class="ln-app"><a href="docs/core/app" class="permalink" data-silent="true">Application</a></h3>
+	<p>
+		The application is an instance of <code>Marionette.Application</code>.
+		Thus, it is the core part of the application's modularization. When started,
+		the application loads all services referenced in the configuration.  
+	</p>
+	
+	<p>
+		Usually, the application in <code>src/<%=lang.appfile%></code> does not have to be changed. However,
+		when creating new abstract classes in the <code>src/abstract</code> folder you might want them to load
+		before any other module or service so that they can inherit from it.<br />
+		Take a look at the <code>onStart</code> function and add your abstract classes there.
+	</p>
+	
+	<h3 class="ln-loader"><a href="docs/core/loader" class="permalink" data-silent="true">loader</a></h3>
+	
+	<p>
+		The loader configures <code>require.js</code>, loads the configuration
+		and starts the application.
+	</p>
+	
+	<p>
+		If you install any dependencies you want to use in your application
+		you have to add them to the configuration. Please check the <a href="http://requirejs.org/docs/api.html#config" target="_blank">official require.js documentation</a>
+		for more information on that.
+	</p>
+	
+	<div class="alert alert-warning">
+		<strong>Attention!</strong><br />
+		If you install dependencies you also have to add them to the build script so that they get minified
+		when building your application for deployment.<br />
+		Refer to the <a href="docs/grunt" class="permalink">Toolchain documentation</a> for more information on that.
+	</div>
+	
+	<p>
+		The loader also requires everything that is meant to be loaded before the application starts.
+		Usually, that are jQuery plugins or front-end framework ressources.<br />
+		For this application, CSS and JavaScript files from the <code>bootflat</code> framework
+		are loaded right after the application and the configuration.
+	</p>
+	
+	<img src="res/bb-core-loader-<%-lang.short%>.png" class="cimg" alt="">
+	
+	<h3 class="ln-config"><a href="docs/core/config" class="permalink" data-silent="true">config</a></h3>
+	
+	<p>
+		The configuration is the central point where important features of a
+		battle-backbone application are steered.<br />
+		It contains information about modules, special routes, services and languages.
+	</p>
+	
+	<br class="hidden-xs" />
+	
+	<div class="cont-list">
+			
+		<div class="row">
+			<div class="col-md-3"><h4>Modules</h4></div>
+			<div class="col-md-9">
+				<p>
+					The <code>modules</code> key contains an object that configures
+					the available modules and binds them to routes.<br />
+					The key is the base route and the value is an identifier containing
+					the Marionette module and filename, the class and a name of an
+					event.
+				</p>
+				
+				<div class="alert alert-info">
+					Please be aware that only the base route is fired as an event. Thus,
+					a request to <code>en-US/users/me/settings</code> will use the
+					<code>users</code> event. <a class="permalink" href="docs/router">More information</a>
+				</div>
+				
+				<p>
+					The format is:
+				</p>
+				
+				<pre><code>[route]: '[Module].[Class]@[Event]'</code></pre>
+				
+				<p>
+					<strong>Consider the following example:</strong>
+				</p>
+				
+				<pre><code>docs: 'Docs.Ctrls.Controller@docs'</code></pre>
+				
+				<ul>
+					<li>Matches any request to <code>docs</code> and sub routes (<code>docs/core</code>, <code>docs/grunt</code> and so on)</li>
+					<li>
+						Tells battle-backbone that there is a <code>modules/Docs/index.<%- lang.ext %></code> file that
+						will be loaded when the route is requested.
+						<div class="alert alert-warning alert-inline">
+							The first part of the module - separated by a dot - must match the module's folder name.
+						</div>
+					</li>
+					<li>
+						After loading the file, the <a href="http://marionettejs.com/docs/marionette.module.html">Marionette Module</a> <code>Docs.Ctrls</code>
+						will be accessed and a new instance of <code>Controller</code> in that module will be created.
+						
+					</li>
+					<li>
+						The event <code>show:docs</code> will be fired on the instance so that <code>onShowDocs</code> will be invoked. It will
+						get the route arguments as an array. If <code>docs/core/config</code> is requested the function
+						will get an array with <code>['core','config']</code>. Please read more in the section about
+						<a href="docs/modules/events" class="permalink">Module handler functions</a>.
+						<div class="alert alert-warning alert-inline">
+							If you use lazy loading in your <a href="docs/modules" class="permalink">Modules</a> the
+							loader mechanism will add loaded dependencies after the array - the array with sub routes will always
+							be the first argument.
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-md-3"><h4>routes</h4></div>
+			<div class="col-md-9">
+				<p>
+					While routes are generally configured using the <code>module</code> property there are two special
+					routes that maps to events:
+				</p>
+				
+				<ul>
+					<li><code>home</code> - Home route for requests to the application root (<code>/</code>). Default value: <code>home</code></li>
+					<li><code>error</code> - Route for errors. Default value: <code>404</code></li>
+				</ul>
+				
+				<p>
+					The keys (e.g. <code>home</code>) will be fired as route events when they are used.<br />
+				</p>
+				
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-md-3"><h4>services</h4></div>
+			<div class="col-md-9">
+				<p>
+					The configuration file also references all available services.
+					This way, the application can load them before starting modules.
+				</p>
+				
+				<p>
+					The value of the key is simply an array that matches file names in the <code>src/services</code>
+					folder.<br />
+					<strong>Example:</strong>
+				</p>
+				
+				<pre>services: [
+    'title',
+    'navigation',
+    'footer',
+    'layout',
+    'behaviors',
+    'navbar',
+    'scroll'
+]</pre>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-md-3"><h4>routerOptions</h4></div>
+			<div class="col-md-9">
+				<p>
+					The <code>routerOptions</code> are given the <a href="">Backbone.Router</a>
+					when initializing it. You will notice that a global variable is used here.
+				</p>
+				
+				<pre><code>routerOptions: window.__ps</code></pre>
+				
+				<p>
+					Usually, this variable is dynamically generated by the server in the HTML file. That
+					way the application root can be generated using the server so that HTML Push State
+					works correctly.  
+				</p>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-md-3"><h4>api</h4></div>
+			<div class="col-md-9">
+				<p>
+					The abstract classes <code>Module</code> and <code>Collection</code> use this key to
+					build URLs for models and collections. <a class="permalink" href="docs/abstract/rest">More information</a>.
+				</p>
+				
+				<p>
+					This key does not have a default value since it depends on your application environment.
+				</p>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-md-3"><h4>languages</h4></div>
+			<div class="col-md-9">
+				<p>
+					The <code>languages</code> property allows you to configure allowed
+					languages. This way the <code>navigation</code> service that provides
+					multi-language support can check if the given language is valid.
+				</p>
+				
+				<p>
+					If not, <code>defaultLanguage</code> will be used.
+				</p>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-md-3"><h4>defaultLanguage</h4></div>
+			<div class="col-md-9">
+				<p>
+					Tells the <code>navigation</code> what language by default.<br />
+					This language will be chosen if the user does not provide a language in the URL
+					or if the provided language is not supported.
+				</p>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-3"><h4>languagePattern</h4></div>
+			<div class="col-md-9">
+				<p>
+					A regular expression that is used to manage the language.<br />
+					If you change this you also have to change the <strong>defaultLanguage</strong>
+					and <strong>languages</strong> settings.
+				</p>
+			</div>
+		</div>
+		
+	</div>
+	
+	<p>
+		Since the configuration is important for a lot of components in battle-backbone and your application
+		it is published using the event bus to all services and modules.<br />
+		Just request <code>config</code>:
+	</p>
+	
+	<pre><code><%- lang.config_request %></code></pre>
+	
+</div>
