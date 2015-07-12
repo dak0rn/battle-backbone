@@ -1,6 +1,6 @@
 *.sublime-*
-node_modules/
 *.swp
+build/
 .DS_Store
 *.log
 Thumbs.db
