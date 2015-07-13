@@ -4,6 +4,8 @@
 define ['App'], (App) ->
 	
 	App.module 'Footer', (Module, a, Backbone, Marionette, $, _) ->
+
+		console.log('Footer')
 		
 		class Module.Controller extends App.module('Abstract').Controller
 		

@@ -4,7 +4,7 @@
 define ['App'], (app) ->
 
 	app.module 'Service', (Module, a, Backbone, Marionette, $, _) ->
-		
+
 		# We wait for the start event
 		# All required services will be loaded then
 		app.vent.once 'start:app', ->
