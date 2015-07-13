@@ -9,7 +9,7 @@ define ['App'], (App) ->
 		
 		class Module.Controller extends Controller
 			handlers:
-				onShowError: ['module/error/view/Error']
+				onShowError: ['module/Error/view/Error']
 			
 			view: null
 					
