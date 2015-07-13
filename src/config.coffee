@@ -5,15 +5,6 @@ define [], () ->
 	
 	# Application modules
 	modules:
-		test: 'Test.Controller@test'
-		#        ^    ^         ^--- Event to use: show:#{name}
-		#        ^    ^      
-		#	     ^    ^--- 'Class'
-		#		 ^
-		# ^      ^--- modules/#{name}/index
-		# ^			  Must be the same as the marionette module!
-		# ^
-		# ^--- Base route
 		'404': 'Error.Controller@error'
 		home: 'Home.Controller@home'
 		docs: 'Docs.Controller@docs'

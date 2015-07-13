@@ -5,3 +5,5 @@ build/
 *.log
 Thumbs.db
 .idea/
+dist/
+build/
