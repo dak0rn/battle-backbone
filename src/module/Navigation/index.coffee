@@ -26,7 +26,7 @@ define [
 				@listenTo @view, 'language:selected', (language) =>
 					@vent.request 'change:language', language
 					
-				@listenTo @vent, 'route:show', @_handleRoutes, this
+				@listenTo @vent, 'show:route', @_handleRoutes, this
 				
 				layout.getRegion('header').show @view
 				
