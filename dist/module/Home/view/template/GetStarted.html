@@ -7,7 +7,7 @@
 	
 	<div class="col-md-1 col-xs-2"><span class="num">1</span></div>
 	<div class="col-md-11 col-xs-9 action">
-		<p>Install <code>battle-backbone</code> with <code>npm</code></p>
+		<p>Install <code>generator-battle-backbone</code> with <code>npm</code></p>
 		
 		<pre><code>npm install -g generator-battle-backbone</code></pre>
 		
@@ -33,22 +33,37 @@
 	
 	<div class="col-md-1 col-xs-2"><span class="num">3</span></div>
 	<div class="col-md-11 col-xs-9 action">
-		<h4>Start coding</h4>
+		<h4>Start a server</h4>
 		<p>
-			You now have the exact same application you are currently using
-			on your computer.
+			A small live reloading web server can be started using Grunt just by running
 		</p>
+
+		<pre>grunt</pre>
 		
 		<% if( 'CoffeeScript' === lang.lang ) { %>
 		<p>
-			The Gruntfile contains tasks to compile your CoffeeScript to JavaScript and copy all 
-			files you have created. Your JavaScript version will then be available in the <code>build</code>
-			folder. <br />
-			grunt's default task will watch your <code>src</code> directory and compile whenever something gets
-			changed. It even has live reload enabled. Just <a href="docs/grunt" class="autolink" data-href="docs/grunt">check the docs</a>
-			for more information!
+			Your CoffeeScript is compiled automatically when you save and your page gets reloaded
+			after that.
 		</p>
 		<% } %>
 	</div>
 	
+</div>
+
+<div class="row steps">
+	
+	<div class="col-md-1 col-xs-2"><span class="num">4</span></div>
+	<div class="col-md-11 col-xs-9 action">
+		<h4>Start coding</h4>
+		<p>
+			You now have a small exmaple application that allows you to
+			kick-off fast.
+		</p>
+		
+	</div>
+	
+</div>
+
+<div class="alert alert-warning alert-inline">
+	You can also clone this very application. Checkout <a href="https://github.com/dak0rn/battle-backbone">https://github.com/dak0rn/battle-backbone</a>
 </div>
