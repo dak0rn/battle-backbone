@@ -3,8 +3,8 @@
 	{ "title": "Marionette", "description": "On top of Backbone works Marionette to provide useful features like complex views and module management." },
 	{ "title": "Radio", "description": "Backbone.Radio replaces the currently used Backbone.Wreqr. It provides event based communication using events, requests and commands." },
 	{ "title": "jQuery", "description": "Backbone and Marionette need a library for DOM manipulations and we use jQuery for that. However, it is also possible to replace it with an API compatible library like Zepto." },
-	{ "title": "lodash", "description": "Instead using underscore, the utility library recommended for Backbone, battle-backbone uses the compatible library lodash. It provides believed to be faster and provides more functions than underscore." },
-	{ "title": "require.js", "description": "Dependency management and dynamic resource loading is done by require.js. Plugins for CSS loading and plain-text files are included." },
+	{ "title": "lodash", "description": "Instead of using underscore (the utility library recommended for Backbone) battle-backbone uses the compatible library lodash. It is believed to be faster and provides more utilities." },
+	{ "title": "require.js", "description": "Dependency management and dynamic resource loading is done by require.js. Plugins for CSS loading, localization and text files are included." },
 	{ "title": "Tooling", "description": "A modern and scalable toolchain to build a battle-backbone application and make it ready for deployment." },
-	{ "title": "CoffeeScript", "description": "It's writen in CoffeeScript to keep it readable and short.", "lang": "cs" }
+	{ "title": "CoffeeScript", "description": "It's writen in CoffeeScript. But there's also a JavaScript version.", "lang": "cs" }
 ]
