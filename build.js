@@ -126,6 +126,24 @@ fs.readdirSync('module').forEach( function(module) {
 	
 	
 });
+
+fs.readdirSync('component').forEach( function(module) {
+	
+	console.log('Analyzing', module);
+	
+	module = 'component/'+module;
+	
+	// Find module's dependencies
+	var m = listIncludes(module);
+	
+	targetModules.push({
+		exclude: coreModules,
+		include: m,
+		name: module + '/index'
+	});
+	
+	
+});
 process.chdir('..');
 
 module.exports = {
