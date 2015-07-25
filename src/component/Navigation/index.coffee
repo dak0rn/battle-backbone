@@ -3,13 +3,15 @@
 # This module is loaded by the navbar service
 #
 define [
-	'App',
-	'./view/Navigation'
+	'App'
 ], (app) ->
 	
 	app.module 'Navigation', (Module, a, Backbone, Marionette, $, _) ->
 		
 		class Module.Controller extends app.module('Abstract').Controller
+
+			handlers:
+				onShowNavigation: ['component/Navigation/view/Navigation']
 		
 			view: null
 			
