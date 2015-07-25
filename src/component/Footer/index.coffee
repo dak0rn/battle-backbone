@@ -10,7 +10,7 @@ define ['App'], (App) ->
 		class Module.Controller extends App.module('Abstract').Controller
 		
 			handlers:
-				onShowFooter: ['module/Footer/view/FooterView']
+				onShowFooter: ['component/Footer/view/FooterView']
 			
 			onShowFooter: ->
 				view = new Module.FooterView

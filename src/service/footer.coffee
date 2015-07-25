@@ -8,7 +8,7 @@ define ['App'], (app) ->
 		# We wait for the start event
 		# All required services will be loaded then
 		app.vent.once 'start:app', ->
-			require ["module/Footer/index"], ->
+			require ["component/Footer/index"], ->
 				Controller = app.module('Footer').Controller
 				ctrl = new Controller
 				ctrl.triggerMethod 'show:footer'
