@@ -1,9 +1,7 @@
 *.sublime-*
 *.swp
 .DS_Store
-node_modules/
 *.log
 Thumbs.db
 .idea/
-dist/
 build/
