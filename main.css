@@ -30,3 +30,7 @@ main dt {
 	padding-bottom: 1.5em;
 	border-bottom: #eee 1px solid;
 }
+
+.alert-default {
+	border: #444 1px solid;
+}
