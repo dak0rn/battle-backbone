@@ -29,6 +29,7 @@ define ['App'], (App) ->
 				"behaviors": "Behaviors"
 				"frameworks": "Frameworks"
 				"howto-modules": "howto/Modules"
+				"components": "Components"
 				
 			# Page layout
 			layout: null
