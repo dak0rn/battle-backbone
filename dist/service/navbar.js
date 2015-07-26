@@ -1,1 +1,1 @@
-define(["App"],function(n){return n.module("Service",function(e,r,t,i,o,u){return n.vent.once("start:app",function(){return require(["module/Navigation/index"],function(){var e,r;return e=n.module("Navigation").Controller,r=new e,r.triggerMethod("show:navigation")})})})});
+define(["App"],function(n){return n.module("Service",function(e,t,r,o,i,u){return n.vent.once("start:app",function(){return require(["component/Navigation/index"],function(){var e,t;return e=n.module("Navigation").Controller,t=new e,t.triggerMethod("show:navigation")})})})});

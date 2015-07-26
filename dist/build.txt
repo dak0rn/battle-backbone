@@ -1,19 +1,19 @@
 
+component/Footer/css/footer.css
+----------------
+component/Footer/css/footer.css
+
+component/Navigation/css/Navigation.css
+----------------
+component/Navigation/css/Navigation.css
+
 module/Docs/css/docs.css
 ----------------
 module/Docs/css/docs.css
 
-module/Footer/css/footer.css
-----------------
-module/Footer/css/footer.css
-
 module/Home/css/Home.css
 ----------------
 module/Home/css/Home.css
-
-module/Navigation/css/Navigation.css
-----------------
-module/Navigation/css/Navigation.css
 
 loader.js
 ----------------
@@ -68,13 +68,6 @@ module/Error/index.js
 text!module/Error/view/template/Error.html
 module/Error/view/Error.js
 
-module/Footer/index.js
-----------------
-module/Footer/index.js
-text!module/Footer/view/template/Footer.html
-css!module/Footer/css/footer
-module/Footer/view/FooterView.js
-
 module/Home/index.js
 ----------------
 module/Home/index.js
@@ -102,9 +95,16 @@ text!module/Home/view/template/Panels.html
 module/Home/view/ProvidesView.js
 module/Home/view/locale.js
 
-module/Navigation/index.js
+component/Footer/index.js
 ----------------
-text!module/Navigation/view/template/Navigation.html
-css!module/Navigation/css/Navigation
-module/Navigation/view/Navigation.js
-module/Navigation/index.js
+component/Footer/index.js
+text!component/Footer/view/template/Footer.html
+css!component/Footer/css/footer
+component/Footer/view/FooterView.js
+
+component/Navigation/index.js
+----------------
+component/Navigation/index.js
+text!component/Navigation/view/template/Navigation.html
+css!component/Navigation/css/Navigation
+component/Navigation/view/Navigation.js
